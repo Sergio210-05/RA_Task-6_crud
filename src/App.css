@@ -1,0 +1,98 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  --close: 20px;
+}
+
+body {
+  background-color: #fff;
+  display: flex;
+}
+
+.notes-container {
+  width: 700px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.title-container {
+  margin-left: 25px;
+  display: flex;
+  color: black;
+}
+
+.title {
+  margin-right: 10px;
+  font-size: 30px;
+}
+
+.note {
+  margin: 25px;
+  width: 300px;
+  border: 1px solid black;
+  padding: 15px;
+  color: black;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.close-button, .reset-button, .submit-button {
+  width: calc(var(--close) * (2));
+  height: calc(var(--close) * (2));
+  padding: 0;
+  border-radius: calc(var(--close));
+  border: no;
+  background-color: #fff;
+  display: flex;
+  z-index: 5;
+}
+
+.close-button{
+  flex-direction: row-reverse;
+  vertical-align: top;
+  position: absolute;
+  background-image: url('./img/close-svgrepo-com.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  right: calc(var(--close) * (-1));
+  top: calc(var(--close) * (-1));
+}
+
+.reset-button {
+  background-image: url('./img/reset-reload-refresh-sync-arrow-update-svgrepo-com.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.form-container {
+  margin: 25px;
+  /* min-height: 200px; */
+  width: inherit;
+  /* display: flex; */
+  border: 1px solid black;
+}
+
+.add-form {
+  min-height: 200px;
+  min-width: inherit;
+  width: 100%;
+  display: flex;
+  border: none;
+  background-color: white;
+  color: black;
+}
+
+.submit-button{
+  flex-direction: row-reverse;
+  vertical-align: bottom;
+  position: relative;
+  background-image: url('./img/play-circle-svgrepo-com.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
