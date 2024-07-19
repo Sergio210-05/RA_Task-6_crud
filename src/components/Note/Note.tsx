@@ -1,11 +1,21 @@
 import { Component } from 'react'
 
-export default class Note extends Component {
+export type NoteType = {
   content: string
   id: number
-  removeHandler: any
+}
 
-  constructor(props) {
+type NotePropsType = {
+  items: NoteType
+  removeHandler: () => void
+}
+
+export default class Note extends Component<NotePropsType> {
+  id: number
+  content: string
+  removeHandler: () => void
+
+  constructor(props: NotePropsType) {
     super(props)
     this.id = props.items.id
     this.content = props.items.content

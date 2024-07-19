@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import AddForm from '../AddForm/AddForm'
-import Note from '../Note/Note'
+import Note, {NoteType} from '../Note/Note'
 
 export default class Notes extends Component {
-  reloadButton: React.RefObject<unknown>
+  reloadButton: React.RefObject<HTMLButtonElement>
   id: number
-  inputForm: React.RefObject<unknown>
+  inputForm: React.RefObject<HTMLInputElement>
   url: string
   references: {}
+  state: Readonly<{notes: NoteType[]}>
   
-  constructor(props) {
+  constructor(props: {}) {
     super(props)
     this.url = 'http://localhost:7070'
     this.reloadButton = React.createRef()
@@ -21,24 +22,26 @@ export default class Notes extends Component {
     this.references = {}
   }
 
-  componentDidMount(): void {
+  componentDidMount = (): void => {
     this.getNotes()
   }
 
-  handleSubmit = () => {
-    const content = this.inputForm.current?.value
+  textContent = (): string => {
+    const content = this.inputForm.current?.value || ''
+    if (this.inputForm.current?.value) {
+      this.inputForm.current.value = ''
+    }
     return content
   }
 
-  updateNoteList = () => {
+  updateNoteList = (): void => {
     this.getNotes()
   }
 
-  removeNote = (element) => {
-    fetch(`${this.url}/notes/${element.id}`, {
+  removeNote = (id: number) => {
+    fetch(`${this.url}/notes/${id}`, {
       method: 'DELETE'
     })
-    .then((response) => response)
     .then(() => {
       this.getNotes()
     })
@@ -63,23 +66,25 @@ export default class Notes extends Component {
   }
 
   postNote = () => {
-    fetch(`${this.url}/notes`, {
-      method: 'POST',
-      body: JSON.stringify({
-        "id": ++this.id,
-        "content": this.handleSubmit()
-      }),
-      headers: {
-        'Content-type': 'application/json',
-      },
-    })
-    .then((response) => response)
-    .then((data) => {
-      this.getNotes()
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+    const content = this.textContent()
+    if (content) {
+      fetch(`${this.url}/notes`, {
+        method: 'POST',
+        body: JSON.stringify({
+          "id": ++this.id,
+          "content": content
+        }),
+        headers: {
+          'Content-type': 'application/json',
+        },
+      })
+      .then(() => {
+        this.getNotes()
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    }
   }
 
   render() {
@@ -89,16 +94,13 @@ export default class Notes extends Component {
           <div className='title'>Notes</div>
           <button className='reset-button' ref={this.reloadButton} onClick={this.updateNoteList}></button>
         </div>
-
         <div className='notes-container'>
-          {this.props.children}
           {this.state.notes.map(note => {
             return(
               <Note 
               key={note.id} 
               items={note} 
-              ref={ref => this.references[note.id] = ref}
-              removeHandler={() => this.removeNote(this.references[note.id])}
+              removeHandler={() => this.removeNote(note.id)}
               />
             )
           })}

@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
 
-export default class AddForm extends Component {
-  constructor(props) {
+type typeFormProps = {
+  inputRef: React.RefObject<HTMLInputElement>
+  handler: () => void
+}
+
+export default class AddForm extends Component<typeFormProps> {
+  inputRef: React.RefObject<HTMLInputElement>
+  handler: () => void
+
+  constructor(props: typeFormProps) {
     super(props)
     this.inputRef = props.inputRef
     this.handler = props.handler
-  }
-
-  componentDidMount(): void {
   }
 
   render() {
@@ -17,11 +22,10 @@ export default class AddForm extends Component {
           <input 
           type='text'
           className='add-form'
-          defaultValue={'Some text'}
+          placeholder={'Введите текст'}
           ref={this.inputRef}>
           </input>
           <button type='submit' className='submit-button' onClick={this.handler}></button>
-          
         </div>
       </>
     )
